@@ -35,9 +35,10 @@ class _LogOrRegisterState extends State<LogOrRegister> {
     // jika isLoading bernilai true maka akan menampilkan loading indicator
     if (isLoading) {
       return const Scaffold(
+        backgroundColor: Color.fromARGB(255, 14, 14, 14),
         body: Center(
           child: CircularProgressIndicator(
-            color: Colors.black,
+            color: Color.fromARGB(255, 201, 201, 201),
           ),
         ),
       );

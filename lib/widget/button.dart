@@ -13,9 +13,11 @@ class MyButton extends StatelessWidget {
       width: 310,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
+          backgroundColor: Color.fromARGB(255, 28, 28, 28),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(
+                color: Color.fromARGB(255, 43, 43, 43), width: 1),
           ),
         ),
         onPressed: onPressed,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
-  final controller;
+  final TextEditingController controller;
   final String hintText;
   final bool obscureText;
 
@@ -21,18 +21,18 @@ class MyTextField extends StatelessWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
             enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white),
-            ),
+                borderSide: BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.all(Radius.circular(8))),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.grey.shade400),
+              borderSide: BorderSide(color: Color.fromARGB(255, 255, 255, 255)),
+              borderRadius: BorderRadius.circular(8),
             ),
             fillColor: Colors.grey.shade200,
             filled: true,
             hintText: hintText,
             hintStyle: TextStyle(
               color: Colors.grey[500],
-              fontFamily: 'Nunito',
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Work',
             )),
       ),
     );

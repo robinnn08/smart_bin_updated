@@ -28,12 +28,13 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  async: ^2.11.0
   firebase_core: ^2.8.0
   firebase_database: ^10.0.16
   syncfusion_flutter_gauges: ^23.1.36
   smooth_page_indicator: ^1.1.0
   lottie: ^2.3.2
-  firebase_auth: ^4.6.0
+  firebase_auth: ^4.15.0
   google_nav_bar: ^5.0.6
   line_icons: ^2.0.1
   http: ^1.0.0
@@ -44,8 +45,12 @@ dependencies:
   google_sign_in: ^6.1.4
   flutter:
     sdk: flutter
-  
-  
+  flutter_local_notifications: ^16.2.0
+  provider: ^6.1.1
+  shared_preferences: ^2.2.2
+  carousel_slider: ^4.2.1
+
+
 
 
 dev_dependencies:
@@ -59,16 +64,21 @@ flutter:
     - image/google.png
     - image/trashgif.gif
     - image/trashlogo.png
+    - image/trashlogo90px.png
     - image/4881655.gif
-    - image/DashboardPNG.png
-    - image/DatalogPNG.png
-    - image/StatisticPNG.png
+    - image/dashboard.png
+    - image/datalog.png
+    - image/locate.png
     - image/bin.png
     - image/weight.png
     - image/plastic.png
     - image/recycleable.png
     - image/organic.png
     - image/timetable.png
+    - image/frieren.png
+    - image/quickacc.png
+    - image/check.png
+    - image/warning.png
     - assets/darkmode.json
   fonts:
     - family: Poppins
@@ -76,10 +86,13 @@ flutter:
         - asset: fonts/Poppins-Bold.ttf
     - family: Nunito
       fonts:
-        - asset: fonts/NunitoSans.ttf
+        - asset: fonts/NunitoMedium.ttf
     - family: Source
       fonts:
         - asset: fonts/SourceSans3-Medium.ttf
     - family: Work
       fonts:
         - asset: fonts/WorkSans-Medium.ttf
+    - family: Nova
+      fonts:
+        - asset: fonts/Proxima-Reg.ttf

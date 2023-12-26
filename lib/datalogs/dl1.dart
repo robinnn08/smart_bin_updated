@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:smart_bin/listfolder/list_n_request.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 // class log yang digunakan untuk menampung data dari url json yang diambil dari firebase
 class Log1 {
@@ -13,7 +13,7 @@ class Log1 {
       status: json['status'] ??
           '', // jika status null, maka status = '' (empty string)
       capacity: json['fullness'] ?? 0, // jika fullness null, maka capacity = 0
-      weight: json['weight'] ?? 0,
+      weight: json['weight'] ?? 0.0,
     ); // jika weight null, maka weight = 0
   }
   Log1({
@@ -27,7 +27,7 @@ class Log1 {
   final String? time;
   final String? status;
   final int? capacity;
-  final int? weight;
+  final dynamic weight;
 }
 
 // class LogDataGridSource sebagai sumber data untuk menampilkan data pada row2 di SfDataGrid
@@ -72,7 +72,7 @@ class LogDataGridSource extends DataGridSource {
           row.getCells()[2].value,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            color: row.getCells()[2].value == 'AVAILABLE'
+            color: row.getCells()[2].value == 'Available'
                 ? const Color.fromARGB(255, 145, 221, 147)
                 : Colors.red,
             fontFamily: 'Work',
@@ -95,7 +95,7 @@ class LogDataGridSource extends DataGridSource {
           alignment: Alignment.center,
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            '${row.getCells()[4].value} g',
+            '${row.getCells()[4].value} kg',
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: Color.fromARGB(255, 255, 255, 255),
@@ -115,7 +115,7 @@ class LogDataGridSource extends DataGridSource {
         DataGridCell<String>(columnName: 'time', value: dataGridRow.time),
         DataGridCell<String>(columnName: 'status', value: dataGridRow.status),
         DataGridCell<int>(columnName: 'capacity', value: dataGridRow.capacity),
-        DataGridCell<int>(columnName: 'weight', value: dataGridRow.weight)
+        DataGridCell<dynamic>(columnName: 'weight', value: dataGridRow.weight)
       ]);
     }).toList(growable: false);
   }
@@ -129,24 +129,12 @@ class LogOne extends StatefulWidget {
 }
 
 class _LogOneState extends State<LogOne> {
-  // mengambil data dari url json yang diambil dari firebase,
-  // kemudian di decode menjadi Map<String, dynamic>
-  // lalu di mapping menjadi List<Log>
-  Future<List<Log1>> generateLogList() async {
-    var response = await http.get(Uri.parse(
-        'https://esp-scale-default-rtdb.asia-southeast1.firebasedatabase.app/LogTest.json'));
-    var decodedLogs = json.decode(response.body).cast<Map<String, dynamic>>();
-    List<Log1> logList =
-        await decodedLogs.map<Log1>((json) => Log1.fromJson(json)).toList();
-    return logList;
-  }
-
   // mengambil data menggunakan fungsi generateLogList()
   // kemudian memasukkan data tersebut ke dalam LogDataGridSource
   // untuk ditampilkan sebagai sumber data pada SfDataGrid
   Future<LogDataGridSource> getLogDataSource() async {
     var logList = await generateLogList();
-    return LogDataGridSource(logList);
+    return LogDataGridSource(logList.cast<Log1>());
   }
 
   // list dari GridColumn yang merupakan judul dari setiap kolom pada SfDataGrid
@@ -233,15 +221,42 @@ class _LogOneState extends State<LogOne> {
 
   @override
   Widget build(BuildContext context) {
+    final hourReference =
+        FirebaseDatabase.instance.ref().child('Read/Tong1/hour');
+    final minuteReference =
+        FirebaseDatabase.instance.ref().child('Read/Tong1/minute');
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double containerWidth = screenWidth;
+    double containerHeight = screenHeight * 0.8;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        leading: Image.asset(
-          'image/trashlogo.png',
+        leading: GestureDetector(
+          onTap: () async {
+            final TimeOfDay? time = await showMyTimePicker(
+              context: context,
+              initialTime: selectedTime1 ?? TimeOfDay.now(),
+            );
+            setState(() {
+              selectedTime1 = time;
+            });
+            hourReference.set(selectedTime1!.hour);
+            minuteReference.set(selectedTime1!.minute);
+          },
+          child: const Icon(
+            Icons.av_timer_rounded,
+            color: Colors.white,
+          ),
         ),
         title: const Text(
           'Bin 1 - Log',
-          style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: 'Work',
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         actions: [
           IconButton(
@@ -255,61 +270,63 @@ class _LogOneState extends State<LogOne> {
         backgroundColor: const Color.fromARGB(255, 66, 66, 66).withOpacity(0.2),
       ),
       backgroundColor: Colors.black.withOpacity(0.9),
-      // digunakan FutureBuilder untuk menunggu data dari getLogDataSource()
-      // yaitu Future<LogDataGridSource>
-      // jika data sudah didapatkan, maka akan ditampilkan tabel data gridnya
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          const Padding(
-            padding: EdgeInsets.only(left: 5, right: 5, top: 10),
-            child: Text(
-              'Log Updated every 24h ',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontFamily: 'Work',
-                fontWeight: FontWeight.w700,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            if (selectedTime1 != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: Text('Scheduled time: ${selectedTime1!.format(context)}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: 'Work',
+                      fontWeight: FontWeight.w700,
+                    )),
+              ),
+            const SizedBox(height: 10),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2.0, right: 2.0),
+                child: Container(
+                  decoration:
+                      BoxDecoration(border: Border.all(color: Colors.white)),
+                  height: containerHeight,
+                  width: containerWidth,
+                  child: FutureBuilder(
+                    future: getLogDataSource(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
+                      return snapshot.hasData
+                          ? SfTheme(
+                              data: SfThemeData(
+                                  dataGridThemeData: SfDataGridThemeData(
+                                brightness: Brightness.dark,
+                                gridLineColor:
+                                    const Color.fromARGB(255, 156, 156, 156),
+                              )),
+                              child: SfDataGrid(
+                                rowHeight: 80,
+                                columnWidthMode: ColumnWidthMode.fill,
+                                allowPullToRefresh: true,
+                                source: snapshot.data,
+                                columns: getColumns(),
+                              ),
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            );
+                    },
+                  ),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Center(
-            child: Container(
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.white)),
-              height: 500,
-              width: 350,
-              child: FutureBuilder(
-                future: getLogDataSource(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  return snapshot.hasData
-                      ? SfTheme(
-                          data: SfThemeData(
-                              dataGridThemeData: SfDataGridThemeData(
-                            brightness: Brightness.dark,
-                            gridLineColor:
-                                const Color.fromARGB(255, 156, 156, 156),
-                          )),
-                          child: SfDataGrid(
-                            rowHeight: 80,
-                            columnWidthMode: ColumnWidthMode.fill,
-                            allowPullToRefresh: true,
-                            source: snapshot.data,
-                            columns: getColumns(),
-                          ),
-                        )
-                      : const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        );
-                },
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

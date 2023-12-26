@@ -46,8 +46,6 @@ class _LoginPageState extends State<LoginPage> {
 
       await Future.delayed(const Duration(milliseconds: 500));
 
-      //Navigator pop disini digunakan untuk menghapus/pop loading indicatornya
-
       Navigator.pop(context);
 
       Navigator.pushReplacement(
@@ -96,17 +94,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 14, 14, 14),
       body: SafeArea(
         child: Center(
           child: ListView(
             children: [
-              const SizedBox(height: 55),
+              const SizedBox(height: 75),
 
               // logo
               const Image(
                 image: AssetImage('image/trashgif.gif'),
-                height: 100,
+                height: 80,
               ),
 
               const SizedBox(height: 30),
@@ -115,10 +113,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   'Let\'s start managing the waste!',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 10, 10, 10),
+                    color: Color.fromARGB(255, 255, 255, 255),
                     fontSize: 18,
-                    fontFamily: 'Nunito',
-                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Work',
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -143,24 +141,23 @@ class _LoginPageState extends State<LoginPage> {
 
               const SizedBox(height: 10),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
                       'Forgot Password?',
                       style: TextStyle(
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Nunito',
+                        color: Color.fromARGB(255, 216, 216, 216),
+                        fontFamily: 'Work',
                       ),
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
 
               Column(
                 children: [
@@ -170,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                       signUserIn();
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
                   // or continue with
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -182,33 +179,32 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey[400],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             'Or continue with',
                             style: TextStyle(
-                              color: Colors.grey[700],
-                              fontFamily: 'Nunito',
-                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 225, 225, 225),
+                              fontFamily: 'Work',
                             ),
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           child: Divider(
                             thickness: 0.5,
-                            color: Colors.grey[400],
+                            color: Color.fromARGB(255, 225, 225, 225),
                           ),
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
 
                   SquareTile(
                     imagePath: 'image/google.png',
                     onTap: () async {
-                      final user = await GoogleAuth().googleSignIn();
+                      final user = await GoogleAuth().googleSignIn(context);
 
                       if (user != null) {
                         // Google Sign-In was successful, navigate to the NavPage
@@ -224,17 +220,16 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Don\'t have an account?',
                         style: TextStyle(
-                          color: Colors.grey[700],
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 225, 225, 225),
+                          fontFamily: 'Work',
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -247,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Nunito',
+                            fontFamily: 'Work',
                           ),
                         ),
                       ),

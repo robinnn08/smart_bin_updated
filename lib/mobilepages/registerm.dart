@@ -22,6 +22,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   // text editing controllers
   final emailController = TextEditingController();
+  final nameController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
@@ -46,7 +47,11 @@ class _RegisterPageState extends State<RegisterPage> {
           email: emailController.text,
           password: passwordController.text,
         );
-        // navigator pop untuk menghilangkan loading indicator
+
+        await FirebaseAuth.instance.currentUser!.updateDisplayName(
+          nameController.text,
+        );
+
         Navigator.pop(context);
         Navigator.pushReplacement(
           context,
@@ -67,6 +72,8 @@ class _RegisterPageState extends State<RegisterPage> {
         showError('Email is already in use.');
       } else if (e.code == 'invalid-email') {
         showError('Email format is invalid.');
+      } else if (e.code == 'weak-password') {
+        showError('Password is too weak. ');
       } else {
         showError('An error occured. Please try again later.');
       }
@@ -98,17 +105,17 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 14, 14, 14),
       body: SafeArea(
         child: Center(
           child: ListView(
             children: [
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               // logo
               const Image(
                 image: AssetImage('image/trashgif.gif'),
-                height: 100,
+                height: 80,
               ),
 
               const SizedBox(height: 30),
@@ -117,10 +124,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Text(
                   'Enter Your Credentials Below',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 10, 10, 10),
+                    color: Color.fromARGB(255, 255, 255, 255),
                     fontSize: 18,
-                    fontFamily: 'Nunito',
-                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Work',
                   ),
                 ),
               ),
@@ -131,6 +137,15 @@ class _RegisterPageState extends State<RegisterPage> {
               MyTextField(
                 controller: emailController,
                 hintText: 'Email',
+                obscureText: false,
+              ),
+
+              const SizedBox(height: 10),
+
+              // username textfield
+              MyTextField(
+                controller: nameController,
+                hintText: 'Username',
                 obscureText: false,
               ),
 
@@ -152,7 +167,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 obscureText: true,
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
 
               Column(
                 children: [
@@ -160,26 +175,25 @@ class _RegisterPageState extends State<RegisterPage> {
                     text: 'Register & Sign In',
                     onPressed: registerUser,
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 15),
                   // or continue with
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
                       children: [
-                        Expanded(
+                        const Expanded(
                           child: Divider(
                             thickness: 0.5,
-                            color: Colors.grey[400],
+                            color: Color.fromARGB(255, 225, 225, 225),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             'Or continue with',
                             style: TextStyle(
-                              color: Colors.grey[700],
-                              fontFamily: 'Nunito',
-                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 225, 225, 225),
+                              fontFamily: 'Work',
                             ),
                           ),
                         ),
@@ -193,12 +207,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
 
                   SquareTile(
                     imagePath: 'image/google.png',
                     onTap: () async {
-                      final user = await GoogleAuth().googleSignIn();
+                      final user = await GoogleAuth().googleSignIn(context);
 
                       if (user != null) {
                         // Google Sign-In was successful, navigate to the NavPage
@@ -213,17 +227,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                     },
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Have an account?',
                         style: TextStyle(
-                          color: Colors.grey[700],
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 225, 225, 225),
+                          fontFamily: 'Work',
                         ),
                       ),
                       const SizedBox(width: 4),

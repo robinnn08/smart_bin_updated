@@ -40,11 +40,7 @@ class _NavPageState extends State<NavPage> {
 
     // Initialize _pages list
     _pages = [
-      HomePage(
-        onTabChanged: (index) {
-          changePage(index);
-        },
-      ),
+      HomePage(),
       const DashBoard(),
       const DataLog(),
     ];
@@ -66,15 +62,23 @@ class _NavPageState extends State<NavPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.black.withOpacity(0.9),
         appBar: AppBar(
           centerTitle: true,
-          leading: Image.asset(
-            'image/trashlogo.png',
+          leading: Container(
+            margin: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'image/trashlogo.png',
+            ),
           ),
           title: Text(
             _titles[_selectedIndex],
-            style: const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'Work',
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+            ),
           ),
           actions: [
             IconButton(
@@ -83,8 +87,7 @@ class _NavPageState extends State<NavPage> {
             ),
           ],
           automaticallyImplyLeading: false,
-          backgroundColor:
-              const Color.fromARGB(255, 66, 66, 66).withOpacity(0.2),
+          backgroundColor: const Color.fromARGB(255, 13, 13, 13),
         ),
         body: _pages[_selectedIndex],
         bottomNavigationBar: GNav(
@@ -97,15 +100,14 @@ class _NavPageState extends State<NavPage> {
           color: Colors.white,
           activeColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 18),
-          backgroundColor:
-              const Color.fromARGB(255, 66, 66, 66).withOpacity(0.1),
-          tabBackgroundColor: Colors.white.withOpacity(0.1),
+          backgroundColor: const Color.fromARGB(255, 13, 13, 13),
+          tabBackgroundColor: Colors.white.withOpacity(0.05),
           tabs: const [
             GButton(
               icon: LineIcons.home,
               text: 'Home',
               textStyle: TextStyle(
-                  fontFamily: 'Source',
+                  fontFamily: 'Nova',
                   color: Colors.white,
                   fontWeight: FontWeight.w700),
             ),
@@ -113,7 +115,7 @@ class _NavPageState extends State<NavPage> {
               icon: LineIcons.trash,
               text: 'Dashboard',
               textStyle: TextStyle(
-                  fontFamily: 'Source',
+                  fontFamily: 'Nova',
                   color: Colors.white,
                   fontWeight: FontWeight.w700),
             ),
@@ -121,7 +123,7 @@ class _NavPageState extends State<NavPage> {
               icon: LineIcons.server,
               text: 'Data Log',
               textStyle: TextStyle(
-                  fontFamily: 'Source',
+                  fontFamily: 'Nova',
                   color: Colors.white,
                   fontWeight: FontWeight.w700),
             ),

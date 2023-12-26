@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class GoogleAuth {
-  Future<UserCredential?> googleSignIn() async {
+  Future<UserCredential?> googleSignIn(BuildContext context) async {
     final GoogleSignInAccount? googleUser =
         await GoogleSignIn().signOut().then((_) {
       return GoogleSignIn().signIn();

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_bin/listfolder/lists.dart';
+import 'package:smart_bin/listfolder/list_n_request.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -36,7 +36,11 @@ class _DashBoardState extends State<DashBoard> {
           itemBuilder: (context, index) {
             final BoxDecoration decoration = BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              gradient: gradientColors[index],
+              color: const Color.fromARGB(255, 28, 28, 28),
+              border: Border.all(
+                color: Color.fromARGB(255, 43, 43, 43),
+                width: 1,
+              ),
             );
 
             final String number = dBbinNum[index];
@@ -72,8 +76,7 @@ class _DashBoardState extends State<DashBoard> {
             Widget dashboards = dbPages[index];
 
             return Padding(
-              padding: const EdgeInsets.only(
-                  left: 10, right: 10, top: 10, bottom: 5),
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
               child: GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -83,7 +86,7 @@ class _DashBoardState extends State<DashBoard> {
                       ));
                 },
                 child: Container(
-                  height: 122,
+                  height: 110,
                   decoration: decoration,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,7 +94,7 @@ class _DashBoardState extends State<DashBoard> {
                       Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 12, top: 25),
+                            padding: const EdgeInsets.only(left: 15, top: 22),
                             child: SizedBox(
                               width: 200,
                               child: Align(
@@ -99,18 +102,18 @@ class _DashBoardState extends State<DashBoard> {
                                 child: Text(
                                   number,
                                   style: const TextStyle(
-                                    color: Colors.black,
+                                    color: Color.fromARGB(255, 240, 241, 245),
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20,
-                                    fontFamily: 'Work',
+                                    fontFamily: 'Nova',
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 10),
                           Padding(
-                            padding: const EdgeInsets.only(left: 12),
+                            padding: const EdgeInsets.only(left: 15),
                             child: SizedBox(
                               height: 30,
                               width: 200,
@@ -129,8 +132,10 @@ class _DashBoardState extends State<DashBoard> {
                                           child: Text(
                                             '$capacity %',
                                             style: const TextStyle(
-                                                fontFamily: 'Work',
-                                                fontWeight: FontWeight.w700,
+                                                fontFamily: 'Nova',
+                                                color: Color.fromARGB(
+                                                    255, 240, 241, 245),
+                                                fontWeight: FontWeight.w500,
                                                 fontSize: 18),
                                           ),
                                         );
@@ -160,10 +165,12 @@ class _DashBoardState extends State<DashBoard> {
                                           padding:
                                               const EdgeInsets.only(left: 5),
                                           child: Text(
-                                            '$weight g',
+                                            '$weight kg',
                                             style: const TextStyle(
-                                                fontFamily: 'Work',
-                                                fontWeight: FontWeight.w700,
+                                                fontFamily: 'Nova',
+                                                color: Color.fromARGB(
+                                                    255, 240, 241, 245),
+                                                fontWeight: FontWeight.w500,
                                                 fontSize: 18),
                                           ),
                                         );
@@ -188,15 +195,14 @@ class _DashBoardState extends State<DashBoard> {
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 8.0, top: 20),
+                        padding: const EdgeInsets.only(right: 10, top: 13),
                         child: Column(
                           children: [
                             SizedBox(
-                              width: 120,
+                              width: 90,
                               child: Center(
                                 child: FutureBuilder(
-                                  future:
-                                      fetchDataFuture, // Use the same future
+                                  future: fetchDataFuture,
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState ==
                                         ConnectionState.done) {
@@ -205,7 +211,9 @@ class _DashBoardState extends State<DashBoard> {
                                         child: Text(
                                           '$type',
                                           style: const TextStyle(
-                                              fontFamily: 'Work',
+                                              fontFamily: 'Nova',
+                                              color: Color.fromARGB(
+                                                  255, 240, 241, 245),
                                               fontWeight: FontWeight.w700,
                                               fontSize: 15),
                                         ),
